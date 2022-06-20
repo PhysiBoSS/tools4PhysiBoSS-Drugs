@@ -54,7 +54,10 @@ for row in range(6):
         drug_pair_data = dataframe_medians.loc[(dataframe_medians["drug_1"] == drug_a) & (dataframe_medians["drug_2"] == drug_b)]
         if not drug_pair_data.empty:
             df_wide = drug_pair_data.pivot_table( index= 'conc_2', columns='conc_1', values='log2_ratio', aggfunc='first')
-            ax = sns.heatmap(ax=axes[col, row], data=df_wide, cbar_ax=cbar_ax, cbar_kws={'label': 'growth index'}, cmap=cmap, norm=norm)
+            ax = sns.heatmap(ax=axes[col, row], data=df_wide, cbar_ax=cbar_ax, cbar_kws={'label': 'growth index'}, cmap=cmap, norm=norm, 
+                             vmin=dataframe_medians["log2_ratio"].min(), 
+                             vmax=dataframe_medians["log2_ratio"].max()
+                             )
             ax.invert_yaxis()
             ax.tick_params(axis='x', labelrotation=45)
             axes[col, row].set(xlabel= "", ylabel= "")
@@ -65,7 +68,7 @@ for ax, col in zip(axes[5,:], drug_names):
 for ax, row in zip(axes[:,0], drug_names):
     ax.set_ylabel(row, rotation=90, size='large')
 
-fig.tight_layout()
+# fig.tight_layout()
 fig.subplots_adjust(top=0.95)
 fig.suptitle('Growth behaviour of LNCaP upon drug treatment with respect to no-drug LNCaP', y=0.98)
 if not os.path.exists('output'):
